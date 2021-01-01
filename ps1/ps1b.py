@@ -27,7 +27,7 @@ while current_savings < down_payment:
     current_savings += monthly_savings + investment_returns
     num_of_months += 1
     if num_of_months % 6 == 0:
-        annual_salary = annual_salary * (1 + semi_annual_raise)
+        annual_salary *= (1 + semi_annual_raise)
 
 print()
 print("Number of months:", num_of_months)
