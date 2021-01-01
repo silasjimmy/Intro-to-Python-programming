@@ -175,6 +175,33 @@ def hangman(secret_word):
 
 
 # -----------------------------------
+        
+def occurrence(word):
+    '''
+    word (list): any list of letters of a word
+    Returns a dictionary with the keys being the letters of the word and
+    values being the number of occurrences that letter occurs  in the word
+    '''
+    letter_occurrences = dict()
+    for letter in word:
+        if letter == '_' or letter == ' ':
+            continue
+        letter_occurrences[letter] = word.count(letter)
+    return letter_occurrences
+        
+def check_pos(my_word, other_word):
+    '''
+    my_word (string): user's guess
+    other_word (string): regular English word
+    Returns True if the number of letter occurrence in my_word matches
+    that of other_word
+    '''
+    my_word_dict = occurrence(my_word)
+    other_word_dict = occurrence(other_word)
+    for letter in my_word_dict:
+        if my_word_dict.get(letter) != other_word_dict.get(letter):
+            return False
+    return True
 
 def match_with_gaps(my_word, other_word):
     '''
@@ -185,8 +212,17 @@ def match_with_gaps(my_word, other_word):
         _ , and my_word and other_word are of the same length;
         False otherwise: 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    my_word_list = [l for l in my_word if l != ' ']
+    
+    if len(my_word_list) == len(other_word) and check_pos(my_word, other_word):
+        for i in range(len(other_word)):
+            if my_word_list[i] == '_':
+                continue
+            if my_word_list[i] != other_word[i]:
+                return False
+    else:
+        return False
+    return True
 
 
 
