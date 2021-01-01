@@ -15,7 +15,7 @@ r = 0.04
 annual_salary = int(input("Enter your annual salary: "))
 portion_saved = float(input("Enter the percent of your salary to save, as a decimal: "))
 total_cost = int(input("Enter the cost of your dream home: "))
-semi_annual_raise = float(input("Enter the semi­annual raise, as a decimal:​ "))
+semi_annual_raise = float(input("Enter the semi-­annual raise, as a decimal:​ "))
 
 down_payment = total_cost * portion_down_payment
 num_of_months = 0
