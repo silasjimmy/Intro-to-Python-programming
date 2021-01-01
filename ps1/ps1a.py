@@ -6,6 +6,8 @@ Created on Fri Jan  1 05:18:40 2021
 @author: silasjimmy
 """
 
+# Part A: House Hunting
+
 portion_down_payment = 0.25
 current_savings = 0
 r = 0.04
