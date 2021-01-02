@@ -68,53 +68,31 @@ def get_frequency_dict(sequence):
 #
 def get_word_score(word, n):
     """
-    Returns the score for a word. Assumes the word is a
-    valid word.
-
-    You may assume that the input word is always either a string of letters, 
-    or the empty string "". You may not assume that the string will only contain 
-    lowercase letters, so you will have to handle uppercase and mixed case strings 
-    appropriately. 
-
-	The score for a word is the product of two components:
-
-	The first component is the sum of the points for letters in the word.
-	The second component is the larger of:
-            1, or
-            7*wordlen - 3*(n-wordlen), where wordlen is the length of the word
-            and n is the hand length when the word was played
-
-	Letters are scored as in Scrabble; A is worth 1, B is
-	worth 3, C is worth 3, D is worth 2, E is worth 1, and so on.
-
     word: string
     n: int >= 0
-    returns: int >= 0
+    Returns the score for a word. Assumes the word is a
+    valid word.
     """
     if len(word) == 0:
         return 0
+    
     word = word.lower()
     first_component = sum([SCRABBLE_LETTER_VALUES.get(l) for l in word])
     points = 7 * len(word) - 3 * (n - len(word))
     second_component = points if points > 1 else 1
-    return first_component * second_component
+    word_score = first_component * second_component
+    
+    return word_score
 
 #
 # Make sure you understand how this function works and what it does!
 #
 def display_hand(hand):
-    """
-    Displays the letters currently in the hand.
-
-    For example:
-       display_hand({'a':1, 'x':2, 'l':3, 'e':1})
-    Should print out something like:
-       a x x l l l e
-    The order of the letters is unimportant.
-
-    hand: dictionary (string -> int)
-    """
     
+    """
+    hand: dictionary (string -> int)
+    Displays the letters currently in the hand.
+    """
     for letter in hand.keys():
         for j in range(hand[letter]):
              print(letter, end=' ')      # print all on the same line
@@ -137,7 +115,6 @@ def deal_hand(n):
     n: int >= 0
     returns: dictionary (string -> int)
     """
-    
     hand={}
     num_vowels = int(math.ceil(n / 3))
 
@@ -172,8 +149,14 @@ def update_hand(hand, word):
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
     """
-
-    pass  # TO DO... Remove this line when you implement this function
+    new_hand = {}
+    word = word.lower()
+    word_dict = get_frequency_dict(word)
+    for letter in hand:
+        n = hand.get(letter, 0) - word_dict.get(letter, 0)
+        if n > 0:
+            new_hand[letter] = n
+    return new_hand
 
 #
 # Problem #3: Test word validity
@@ -348,4 +331,5 @@ def play_game(word_list):
 if __name__ == '__main__':
 #    word_list = load_words()
 #    play_game(word_list)
-    print(get_word_score('aaa', 3))
+    hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
+    print(update_hand(hand, 'quail'))
