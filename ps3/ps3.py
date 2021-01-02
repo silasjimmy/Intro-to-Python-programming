@@ -133,18 +133,6 @@ def deal_hand(n):
 #
 def update_hand(hand, word):
     """
-    Does NOT assume that hand contains every letter in word at least as
-    many times as the letter appears in word. Letters in word that don't
-    appear in hand should be ignored. Letters that appear in word more times
-    than in hand should never result in a negative count; instead, set the
-    count in the returned hand to 0 (or remove the letter from the
-    dictionary, depending on how your code is structured). 
-
-    Updates the hand: uses up the letters in the given word
-    and returns the new hand, without those letters in it.
-
-    Has no side effects: does not modify hand.
-
     word: string
     hand: dictionary (string -> int)    
     returns: dictionary (string -> int)
@@ -152,10 +140,12 @@ def update_hand(hand, word):
     new_hand = {}
     word = word.lower()
     word_dict = get_frequency_dict(word)
+    
     for letter in hand:
         n = hand.get(letter, 0) - word_dict.get(letter, 0)
         if n > 0:
             new_hand[letter] = n
+            
     return new_hand
 
 #
@@ -172,8 +162,14 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
-
-    pass  # TO DO... Remove this line when you implement this function
+    word = word.lower()
+    word_dict = get_frequency_dict(word)
+    
+    if word in word_list:
+        for letter in word_dict:
+            if word_dict.get(letter) > hand.get(letter, 0):
+                return False
+    return True
 
 #
 # Problem #5: Playing a hand
@@ -332,4 +328,4 @@ if __name__ == '__main__':
 #    word_list = load_words()
 #    play_game(word_list)
     hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
-    print(update_hand(hand, 'quail'))
+    print(is_valid_word('quail', hand, word_list))
