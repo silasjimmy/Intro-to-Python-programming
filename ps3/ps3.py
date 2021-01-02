@@ -77,7 +77,11 @@ def get_word_score(word, n):
         return 0
     
     word = word.lower()
-    first_component = sum([SCRABBLE_LETTER_VALUES.get(l) for l in word])
+    first_component = 0
+    
+    for letter in word:
+        first_component += SCRABBLE_LETTER_VALUES.get(letter, 0)
+        
     points = 7 * len(word) - 3 * (n - len(word))
     second_component = points if points > 1 else 1
     word_score = first_component * second_component
@@ -117,8 +121,10 @@ def deal_hand(n):
     """
     hand={}
     num_vowels = int(math.ceil(n / 3))
+    
+    hand['*'] = 1
 
-    for i in range(num_vowels):
+    for i in range(1, num_vowels):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
     
@@ -163,13 +169,24 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
     word = word.lower()
-    word_dict = get_frequency_dict(word)
     
-    if word in word_list:
-        for letter in word_dict:
-            if word_dict.get(letter) > hand.get(letter, 0):
-                return False
-    return True
+    if '*' in word:
+        possible_words = []
+        for v in VOWELS:
+            l = list(word)
+            l.remove('*')
+            l.insert(word.index('*'), v)
+            possible_words.append(''.join(l))
+        matches = [w for w in word_list if w in possible_words]
+        if matches:
+            return True
+    else:
+        word_dict = get_frequency_dict(word)
+        if word in word_list:
+            for letter in word_dict:
+                if word_dict.get(letter) > hand.get(letter, 0):
+                    return False
+        return True
 
 #
 # Problem #5: Playing a hand
@@ -325,7 +342,7 @@ def play_game(word_list):
 # when the program is run directly, instead of through an import statement
 #
 if __name__ == '__main__':
-#    word_list = load_words()
+    word_list = load_words()
 #    play_game(word_list)
     hand = {'a':1, 'q':1, 'l':2, 'm':1, 'u':1, 'i':1}
-    print(is_valid_word('quail', hand, word_list))
+    print(is_valid_word('q*ail', hand, word_list))
