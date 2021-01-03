@@ -168,10 +168,13 @@ def is_valid_word(word, hand, word_list):
             return True
     else:
         word_dict = get_frequency_dict(word)
-        if word in word_list:
-            for letter in word_dict:
-                if word_dict.get(letter) > hand.get(letter, 0):
-                    return False
+        if word not in word_list:
+            return False
+        for letter in word_dict:
+            if hand.get(letter) == None:
+                return False
+            elif word_dict.get(letter) > hand.get(letter, 0):
+                return False
         return True
 
 #
@@ -232,10 +235,9 @@ def play_hand(hand, word_list):
         
         hand = update_hand(hand, user_input)
         
-    return total_points
+    print("\nRan out of letters. Total score:", total_points, "points")
         
-#    if len(hand) == 0:
-#        print("Ran out of letters. Total score:", total_points, "points")
+    return total_points
     
     # BEGIN PSEUDOCODE <-- Remove this comment when you implement this function
     # Keep track of the total score
@@ -349,5 +351,5 @@ def play_game(word_list):
 if __name__ == '__main__':
     word_list = load_words()
 #    play_game(word_list)
-    hand = {'a':1, 'j':1, 'e':1, 'f':1, '*':1, 'r':1, 'x':1} #deal_hand(HAND_SIZE)
+    hand = {'a':1, 'c':1, 'i':1, 'f':1, '*':1, 't':1, 'x':1} #deal_hand(HAND_SIZE)
     play_hand(hand, word_list)
