@@ -4,11 +4,6 @@
 # Time spent: A couple of days
 
 # Hangman Game
-# -----------------------------------
-# Helper code
-# You don't need to understand this helper code,
-# but you will have to know how to use the functions
-# (so be sure to read the docstrings!)
 
 import random
 import string
@@ -23,16 +18,11 @@ def load_words():
     take a while to finish.
     """
     print("Loading word list from file...")
-    # inFile: file
     inFile = open(WORDLIST_FILENAME, 'r')
-    # line: string
     line = inFile.readline()
-    # wordlist: list of strings
     wordlist = line.split()
     print("  ", len(wordlist), "words loaded.")
     return wordlist
-
-
 
 def choose_word(wordlist):
     """
@@ -41,12 +31,6 @@ def choose_word(wordlist):
     """
     return random.choice(wordlist)
 
-# end of helper code
-
-# -----------------------------------
-
-# Load the list of words into the variable wordlist
-# so that it can be accessed from anywhere in the program
 wordlist = load_words()
 
 def is_word_guessed(secret_word, letters_guessed):
@@ -168,14 +152,6 @@ def hangman(secret_word):
         print ("----------------------")
         print ("Sorry, you ran out of guesses. The word was", secret_word)
 
-# When you've completed your hangman function, scroll down to the bottom
-# of the file and uncomment the first two lines to test
-#(hint: you might want to pick your own
-# secret_word while you're doing your own testing)
-
-
-# -----------------------------------
-
 def match_with_gaps(my_word, other_word):
     '''
     my_word: string with _ characters, current guess of secret word
@@ -196,8 +172,6 @@ def match_with_gaps(my_word, other_word):
             return False
     return True
 
-
-
 def show_possible_matches(my_word):
     '''
     my_word: string with _ characters, current guess of secret word
@@ -217,8 +191,6 @@ def show_possible_matches(my_word):
         print (possible_matches)
     else:
         print ('No matches found')
-
-
 
 def hangman_with_hints(secret_word):
     '''
@@ -273,27 +245,13 @@ def hangman_with_hints(secret_word):
         print ("----------------------")
         print ("Sorry, you ran out of guesses. The word was", secret_word)
 
-
-
-# When you've completed your hangman_with_hint function, comment the two similar
-# lines above that were used to run the hangman function, and then uncomment
-# these two lines and run this file to test!
-# Hint: You might want to pick your own secret_word while you're testing.
-
-
 if __name__ == "__main__":
-    # pass
-
-    # To test part 2, comment out the pass line above and
-    # uncomment the following two lines.
-    
-#    secret_word = choose_word(wordlist)
-#    hangman(secret_word)
-
-###############
-    
-    # To test part 3 re-comment out the above lines and 
-    # uncomment the following two lines. 
-    
+#    Hangman
     secret_word = choose_word(wordlist)
-    hangman_with_hints(secret_word)
+    hangman(secret_word)
+
+###########################################
+    
+##    Hangman with hints
+#    secret_word = choose_word(wordlist)
+#    hangman_with_hints(secret_word)
