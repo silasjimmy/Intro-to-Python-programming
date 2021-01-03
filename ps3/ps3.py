@@ -5,7 +5,7 @@
 #
 # Name          : Silas Jimmy
 # Collaborators : None
-# Time spent    : <total time>
+# Time spent    : 24hrs
 
 import math
 import random
@@ -20,7 +20,6 @@ def load_words():
     """
     Returns a list of valid words. Words are strings of lowercase letters.
     """
-    
     print("Loading word list from file...")
     inFile = open(WORDLIST_FILENAME, 'r')
     wordlist = []
@@ -38,8 +37,6 @@ def get_frequency_dict(sequence):
     and the values are integer counts, for the number of times that
     an element is repeated in the sequence.
     """
-    
-    # freqs: dictionary (element_type -> int)
     freq = {}
     for x in sequence:
         freq[x] = freq.get(x,0) + 1
@@ -68,7 +65,6 @@ def get_word_score(word, n):
     return word_score
 
 def display_hand(hand):
-    
     """
     hand: dictionary (string -> int)
     Displays the letters currently in the hand.
@@ -159,32 +155,10 @@ def calculate_handlen(hand):
 def play_hand(hand, word_list):
 
     """
-    Allows the user to play the given hand, as follows:
-
-    * The hand is displayed.
-    
-    * The user may input a word.
-
-    * When any word is entered (valid or invalid), it uses up letters
-      from the hand.
-
-    * An invalid word is rejected, and a message is displayed asking
-      the user to choose another word.
-
-    * After every valid word: the score for that word is displayed,
-      the remaining letters in the hand are displayed, and the user
-      is asked to input another word.
-
-    * The sum of the word scores is displayed when the hand finishes.
-
-    * The hand finishes when there are no more unused letters.
-      The user can also finish playing the hand by inputing two 
-      exclamation points (the string '!!') instead of a word.
-
-      hand: dictionary (string -> int)
-      word_list: list of lowercase strings
-      returns: the total score for the hand
-      
+    Allows the user to play the given hand
+    hand: dictionary (string -> int)
+    word_list: list of lowercase strings
+    returns: the total score for the hand
     """
     total_score = 0
     
