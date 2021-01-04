@@ -63,31 +63,30 @@ class Message(object):
     def __init__(self, text):
         '''
         Initializes a Message object
-                
         text (string): the message's text
 
         a Message object has two attributes:
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
         Used to safely access self.message_text outside of the class
-        
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
         Used to safely access a copy of self.valid_words outside of the class.
         This helps you avoid accidentally mutating class attributes.
-        
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        valid_words = self.valid_words[:]
+        return valid_words
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +102,28 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        uppercase_letters = list(string.ascii_uppercase)
+        lowercase_letters = list(string.ascii_lowercase)
+        max_index = len(uppercase_letters) - shift
+        shift_dict = {}
+        
+        for letter in uppercase_letters:
+            letter_index = uppercase_letters.index(letter)
+            if letter_index < max_index:
+                shift_dict[letter] = uppercase_letters[letter_index + shift]
+            else:
+                rem = shift - (len(uppercase_letters) - uppercase_letters.index(letter))
+                shift_dict[letter] = uppercase_letters[rem]
+                
+        for letter in lowercase_letters:
+            letter_index = lowercase_letters.index(letter)
+            if letter_index < max_index:
+                shift_dict[letter] = lowercase_letters[letter_index + shift]
+            else:
+                rem = shift - (len(lowercase_letters) - lowercase_letters.index(letter))
+                shift_dict[letter] = lowercase_letters[rem]
+                
+        return shift_dict
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +137,10 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        shift_dict = self.build_shift_dict(shift)
+        new_message_text = [shift_dict.get(letter) for letter in self.message_text]
+        
+        return ''.join(new_message_text)
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -221,4 +244,6 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+#    pass #delete this line and replace with your code here
+    m = Message('abcd')
+    print(m.apply_shift(1))
