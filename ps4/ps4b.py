@@ -205,7 +205,8 @@ class CiphertextMessage(Message):
                     valid_words += 1
                     
             if valid_words > max_valid_words:
-                best_shift_value = shift_value
+                max_valid_words = valid_words
+                best_shift_value = 26 - shift_value
                 decrypted_message = message
                 
         return best_shift_value, decrypted_message
