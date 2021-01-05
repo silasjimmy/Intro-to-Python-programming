@@ -147,7 +147,9 @@ def filter_stories(stories, triggerlist):
 #======================
 # User-Specified Triggers
 #======================
+    
 # Problem 11
+    
 def read_trigger_config(filename):
     """
     filename: the name of a trigger configuration file
