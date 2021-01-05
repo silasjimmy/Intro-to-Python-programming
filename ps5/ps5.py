@@ -9,7 +9,7 @@ import time
 import threading
 from project_util import translate_html
 from mtTkinter import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 
@@ -97,7 +97,7 @@ class Trigger(object):
 
 class PhraseTrigger(Trigger):
     def __init__(self, phrase):
-        self.phrase = phrase.lower()
+        self.phrase = phrase
         
     def is_phrase_in(self, text):
         return None
@@ -118,16 +118,29 @@ class TitleTrigger(PhraseTrigger):
         title = [word for word in title.split(sep=' ') if word != '']
         title = ' '.join(title)
         
-        if (' ' + self.phrase + ' ') in (' ' + title + ' '):
+        if (' ' + self.phrase.lower() + ' ') in (' ' + title.lower() + ' '):
             return True
         return False
-
-news = NewsStory('', 'Purple cows are cool!', '', '', datetime.now())
-p = TitleTrigger('purple cow')
-print(p.evaluate(news))
         
 # Problem 4
-# TODO: DescriptionTrigger
+
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        PhraseTrigger.__init__(self, phrase)
+        
+    def evaluate(self, story):
+        description = story.get_description()
+        
+        for punctuation in string.punctuation:
+            if punctuation in description:
+                description = description.replace(punctuation, ' ')
+                
+        description = [word for word in description.split(sep=' ') if word != '']
+        description = ' '.join(description)
+        
+        if (' ' + self.phrase.lower() + ' ') in (' ' + description.lower() + ' '):
+            return True
+        return False
 
 # TIME TRIGGERS
 
@@ -136,10 +149,41 @@ print(p.evaluate(news))
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
+        
+class TimeTrigger(Trigger):
+    def __init__(self, time):
+        time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
+        time = time.replace(tzinfo=pytz.timezone("EST"))
+        self.time = time
 
 # Problem 6
 # TODO: BeforeTrigger and AfterTrigger
-
+        
+class BeforeTrigger(TimeTrigger):
+    def __init__(self, time):
+        TimeTrigger.__init__(self, time)
+        
+    def evaluate(self, story):
+        pubdate = story.get_pubdate()
+        # Convert to the timezone
+        pubdate = pubdate.replace(tzinfo=pytz.timezone("EST"))
+        
+        if pubdate <= self.time:
+            return True
+        return False
+    
+class AfterTrigger(TimeTrigger):
+    def __init__(self, time):
+        TimeTrigger.__init__(self, time)
+        
+    def evaluate(self, story):
+        pubdate = story.get_pubdate()
+        # Convert to the timezone
+        pubdate = pubdate.replace(tzinfo=pytz.timezone("EST"))
+        
+        if pubdate > self.time:
+            return True
+        return False
 
 # COMPOSITE TRIGGERS
 
