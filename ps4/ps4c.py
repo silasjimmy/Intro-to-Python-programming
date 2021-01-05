@@ -143,7 +143,8 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def decrypt_message(self):
         '''
@@ -163,7 +164,25 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+        permutations = get_permutations(VOWELS_LOWER)
+        max_valid_words = 0
+        decrypted_message = self.message_text
+        
+        for permutation in permutations:
+            transpose_dict = self.build_transpose_dict(permutation)
+            message = self.apply_transpose(transpose_dict)
+            split_message = message.split(sep=' ')
+            valid_words = 0
+            
+            for word in split_message:
+                if is_word(self.valid_words, word):
+                    valid_words += 1
+                    
+            if valid_words > max_valid_words:
+                max_valid_words = valid_words
+                decrypted_message = message
+        
+        return decrypted_message
     
 
 if __name__ == '__main__':
@@ -175,7 +194,5 @@ if __name__ == '__main__':
     print("Original message:", message.get_message_text(), "Permutation:", permutation)
     print("Expected encryption:", "Hallu Wurld!")
     print("Actual encryption:", message.apply_transpose(enc_dict))
-#    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
-#    print("Decrypted message:", enc_message.decrypt_message())
-    
-    #TODO: WRITE YOUR TEST CASES HERE
+    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    print("Decrypted message:", enc_message.decrypt_message())
