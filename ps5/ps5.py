@@ -57,7 +57,7 @@ def process(url):
 class NewsStory(object):
     def __init__(self, guid, title, description, link, pubdate):
         self.guid = guid
-        self.title = title
+        self.title = title.lower()
         self.description =description
         self.link = link
         self.pubdate = pubdate
@@ -94,11 +94,38 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = phrase.lower()
+        
+    def is_phrase_in(self, text):
+        return None
 
 # Problem 3
-# TODO: TitleTrigger
+        
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        PhraseTrigger.__init__(self, phrase)
+        
+    def evaluate(self, story):
+        title = story.get_title()
+        
+        for punctuation in string.punctuation:
+            if punctuation in title:
+                title = title.replace(punctuation, ' ')
+                
+        title = [word for word in title.split(sep=' ') if word != '']
+        title = ' '.join(title)
+        
+        if (' ' + self.phrase + ' ') in (' ' + title + ' '):
+            return True
+        return False
 
+news = NewsStory('', 'Purple cows are cool!', '', '', datetime.now())
+p = TitleTrigger('purple cow')
+print(p.evaluate(news))
+        
 # Problem 4
 # TODO: DescriptionTrigger
 
