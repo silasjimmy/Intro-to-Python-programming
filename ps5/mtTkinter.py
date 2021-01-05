@@ -123,30 +123,30 @@ class _TkAttr(object):
             else:
                 return response
 
-# Define a hook for class Tk's __init__ method.
-def _Tk__init__(self, *args, **kwargs):
-    # We support some new keyword arguments that the original __init__ method
-    # doesn't expect, so separate those out before doing anything else.
-    new_kwnames = ('mtCheckPeriod', 'mtDebug')
-    new_kwargs = {}
-    for name, value in kwargs.items():
-        if name in new_kwnames:
-            new_kwargs[name] = value
-            del kwargs[name]
-
-    # Call the original __init__ method, creating the internal tk member.
-    self.__original__init__mtTkinter(*args, **kwargs)
-
-    # Replace the internal tk member with a wrapper that handles calls from
-    # other threads.
-    self.tk = _Tk(self.tk, **new_kwargs)
-
-    # Set up the first event to check for out-of-thread events.
-    self.after_idle(_CheckEvents, self)
-
-# Replace Tk's original __init__ with the hook.
-Tk.__original__init__mtTkinter = Tk.__init__
-Tk.__init__ = _Tk__init__
+## Define a hook for class Tk's __init__ method.
+#def _Tk__init__(self, *args, **kwargs):
+#    # We support some new keyword arguments that the original __init__ method
+#    # doesn't expect, so separate those out before doing anything else.
+#    new_kwnames = ('mtCheckPeriod', 'mtDebug')
+#    new_kwargs = {}
+#    for name, value in kwargs.items():
+#        if name in new_kwnames:
+#            new_kwargs[name] = value
+#            del kwargs[name]
+#
+#    # Call the original __init__ method, creating the internal tk member.
+#    self.__original__init__mtTkinter(*args, **kwargs)
+#
+#    # Replace the internal tk member with a wrapper that handles calls from
+#    # other threads.
+#    self.tk = _Tk(self.tk, **new_kwargs)
+#
+#    # Set up the first event to check for out-of-thread events.
+#    self.after_idle(_CheckEvents, self)
+#
+## Replace Tk's original __init__ with the hook.
+#Tk.__original__init__mtTkinter = Tk.__init__
+#Tk.__init__ = _Tk__init__
 
 def _CheckEvents(tk):
     "Event checker event."

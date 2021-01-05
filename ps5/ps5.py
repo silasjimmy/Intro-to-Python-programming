@@ -188,13 +188,33 @@ class AfterTrigger(TimeTrigger):
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+        
+class NotTrigger(Trigger):
+    def __init__(self, trigger):
+        self.trigger = trigger
+        
+    def evaluate(self, story):
+        return not self.trigger.evaluate(story)
 
 # Problem 8
-# TODO: AndTrigger
+        
+class AndTrigger(Trigger):
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+        
+    def evaluate(self, story):
+        return self.trigger1.evaluate(story) and self.trigger2.evaluate(story)
 
 # Problem 9
-# TODO: OrTrigger
+        
+class OrTrigger(Trigger):
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+        
+    def evaluate(self, story):
+        return self.trigger1.evaluate(story) or self.trigger2.evaluate(story)
 
 
 #======================
@@ -310,10 +330,10 @@ def main_thread(master):
         print(e)
 
 
-#if __name__ == '__main__':
-#    root = Tk()
-#    root.title("Some RSS parser")
-#    t = threading.Thread(target=main_thread, args=(root,))
-#    t.start()
-#    root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    root.title("Some RSS parser")
+    t = threading.Thread(target=main_thread, args=(root,))
+    t.start()
+    root.mainloop()
 
