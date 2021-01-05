@@ -54,7 +54,28 @@ def process(url):
 
 # Problem 1
 
-# TODO: NewsStory
+class NewsStory(object):
+    def __init__(self, guid, title, description, link, pubdate):
+        self.guid = guid
+        self.title = title
+        self.description =description
+        self.link = link
+        self.pubdate = pubdate
+        
+    def get_guid(self):
+        return self.guid
+    
+    def get_title(self):
+        return self.title
+    
+    def get_description(self):
+        return self.description
+    
+    def get_link(self):
+        return self.link
+    
+    def get_pubdate(self):
+        return self.pubdate
 
 
 #======================
@@ -216,10 +237,10 @@ def main_thread(master):
         print(e)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    root.title("Some RSS parser")
-    t = threading.Thread(target=main_thread, args=(root,))
-    t.start()
-    root.mainloop()
+#if __name__ == '__main__':
+#    root = Tk()
+#    root.title("Some RSS parser")
+#    t = threading.Thread(target=main_thread, args=(root,))
+#    t.start()
+#    root.mainloop()
 
