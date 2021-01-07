@@ -244,10 +244,27 @@ def filter_stories(stories, triggerlist):
     
 # Problem 11
     
+def create_trigger_object(keyword, trigger):
+    if keyword == 'TITLE':
+        return TitleTrigger(trigger)
+    elif keyword == 'DESCRIPTION':
+        return DescriptionTrigger(trigger)
+    elif keyword == 'BEFORE':
+        return BeforeTrigger(trigger)
+    elif keyword == 'AFTER':
+        return AfterTrigger(trigger)
+    elif keyword == 'NOT':
+        return NotTrigger(trigger)
+    
+def create_trigger_object_1(keyword, trigger1, trigger2):
+    if keyword == 'OR':
+        return OrTrigger(trigger1, trigger2)
+    elif keyword == 'AND':
+        return AndTrigger(trigger1, trigger2)
+    
 def read_trigger_config(filename):
     """
     filename: the name of a trigger configuration file
-
     Returns: a list of trigger objects specified by the trigger configuration
         file.
     """
@@ -255,18 +272,35 @@ def read_trigger_config(filename):
     # comments. You don't need to know how it works for now!
     trigger_file = open(filename, 'r')
     lines = []
+    add_line = None
+    
     for line in trigger_file:
         line = line.rstrip()
         if not (len(line) == 0 or line.startswith('//')):
-            lines.append(line)
+            if line.startswith('ADD'):
+                add_line = line
+            else:
+                lines.append(line)
 
     # TODO: Problem 11
     # line is the list of lines that you need to parse and for which you need
     # to build triggers
-
-    print(lines) # for now, print it so you see what it contains!
-
-
+    
+    triggers = {}
+    
+    for line in lines:
+        line = line.split(sep=',')
+        if line[1] in ['AND', 'OR']:
+            triggers[line[0]] = create_trigger_object_1(line[1], line[2], line[3])
+        else:
+            triggers[line[0]] = create_trigger_object(line[1], line[2])
+            
+    # Create the trigger list
+    add_line = add_line.split(sep=',')
+    add_line.remove('ADD')
+    trigger_list = [triggers.get(trigger) for trigger in add_line]
+            
+    return trigger_list
 
 SLEEPTIME = 120 #seconds -- how often we poll
 
