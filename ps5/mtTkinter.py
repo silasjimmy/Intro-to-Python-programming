@@ -234,7 +234,6 @@ def _pressOk(root, button):
 # Test. Mostly borrowed from the Tkinter module, but the important bits moved
 # into a separate thread.
 if __name__ == '__main__':
-    import threading
     root = Tk(mtDebug = 1)
     thread = threading.Thread(target = _testThread, args=(root,))
     thread.start()

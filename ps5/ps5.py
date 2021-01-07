@@ -1,7 +1,7 @@
 # 6.0001/6.00 Problem Set 5 - RSS Feed Filter
-# Name:
-# Collaborators:
-# Time:
+# Name: Silas Jimmy
+# Collaborators: None
+# Time: 24hrs
 
 import feedparser
 import string
@@ -9,17 +9,9 @@ import time
 import threading
 from project_util import translate_html
 from mtTkinter import *
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 
-
-#-----------------------------------------------------------------------
-
-#======================
-# Code for retrieving and parsing
-# Google and Yahoo News feeds
-# Do not change this code
-#======================
 
 def process(url):
     """
@@ -48,12 +40,6 @@ def process(url):
         ret.append(newsStory)
     return ret
 
-#======================
-# Data structure design
-#======================
-
-# Problem 1
-
 class NewsStory(object):
     def __init__(self, guid, title, description, link, pubdate):
         self.guid = guid
@@ -77,11 +63,6 @@ class NewsStory(object):
     def get_pubdate(self):
         return self.pubdate
 
-
-#======================
-# Triggers
-#======================
-
 class Trigger(object):
     def evaluate(self, story):
         """
@@ -91,10 +72,6 @@ class Trigger(object):
         # DO NOT CHANGE THIS!
         raise NotImplementedError
 
-# PHRASE TRIGGERS
-
-# Problem 2
-
 class PhraseTrigger(Trigger):
     def __init__(self, phrase):
         self.phrase = phrase
@@ -102,8 +79,6 @@ class PhraseTrigger(Trigger):
     def is_phrase_in(self, text):
         return None
 
-# Problem 3
-        
 class TitleTrigger(PhraseTrigger):
     def __init__(self, phrase):
         PhraseTrigger.__init__(self, phrase)
@@ -122,8 +97,6 @@ class TitleTrigger(PhraseTrigger):
             return True
         return False
         
-# Problem 4
-
 class DescriptionTrigger(PhraseTrigger):
     def __init__(self, phrase):
         PhraseTrigger.__init__(self, phrase)
@@ -141,23 +114,12 @@ class DescriptionTrigger(PhraseTrigger):
         if (' ' + self.phrase.lower() + ' ') in (' ' + description.lower() + ' '):
             return True
         return False
-
-# TIME TRIGGERS
-
-# Problem 5
-# TODO: TimeTrigger
-# Constructor:
-#        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
-#        Convert time from string to a datetime before saving it as an attribute.
         
 class TimeTrigger(Trigger):
     def __init__(self, time):
         time = datetime.strptime(time, "%d %b %Y %H:%M:%S")
         time = time.replace(tzinfo=pytz.timezone("EST"))
         self.time = time
-
-# Problem 6
-# TODO: BeforeTrigger and AfterTrigger
         
 class BeforeTrigger(TimeTrigger):
     def __init__(self, time):
@@ -185,10 +147,6 @@ class AfterTrigger(TimeTrigger):
             return True
         return False
 
-# COMPOSITE TRIGGERS
-
-# Problem 7
-        
 class NotTrigger(Trigger):
     def __init__(self, trigger):
         self.trigger = trigger
@@ -196,8 +154,6 @@ class NotTrigger(Trigger):
     def evaluate(self, story):
         return not self.trigger.evaluate(story)
 
-# Problem 8
-        
 class AndTrigger(Trigger):
     def __init__(self, trigger1, trigger2):
         self.trigger1 = trigger1
@@ -206,8 +162,6 @@ class AndTrigger(Trigger):
     def evaluate(self, story):
         return self.trigger1.evaluate(story) and self.trigger2.evaluate(story)
 
-# Problem 9
-        
 class OrTrigger(Trigger):
     def __init__(self, trigger1, trigger2):
         self.trigger1 = trigger1
@@ -216,12 +170,6 @@ class OrTrigger(Trigger):
     def evaluate(self, story):
         return self.trigger1.evaluate(story) or self.trigger2.evaluate(story)
 
-
-#======================
-# Filtering
-#======================
-
-# Problem 10
 def filter_stories(stories, triggerlist):
     """
     Takes in a list of NewsStory instances.
@@ -236,15 +184,13 @@ def filter_stories(stories, triggerlist):
         
     return filtered_stories
 
-
-
-#======================
-# User-Specified Triggers
-#======================
-    
-# Problem 11
-    
 def create_trigger_object(keyword, trigger):
+    '''
+    Creates a trigger object with one argument.
+    keyword (str): The keyword to match with the type of trigger to create.
+    trigger (str): The trigger phrase to use as argument in creating the trigger
+    Returns: Trigger object
+    '''
     if keyword == 'TITLE':
         return TitleTrigger(trigger)
     elif keyword == 'DESCRIPTION':
@@ -257,6 +203,13 @@ def create_trigger_object(keyword, trigger):
         return NotTrigger(trigger)
     
 def create_trigger_object_1(keyword, trigger1, trigger2):
+    '''
+    Creates a trigger object with two arguments.
+    keyword (str): The keyword to match with the type of trigger to create.
+    trigger1 (str): The first trigger argument.
+    trigger2 (str): The second trigger argument.
+    Returns: Trigger object
+    '''
     if keyword == 'OR':
         return OrTrigger(trigger1, trigger2)
     elif keyword == 'AND':
@@ -268,8 +221,6 @@ def read_trigger_config(filename):
     Returns: a list of trigger objects specified by the trigger configuration
         file.
     """
-    # We give you the code to read in the file and eliminate blank lines and
-    # comments. You don't need to know how it works for now!
     trigger_file = open(filename, 'r')
     lines = []
     add_line = None
@@ -281,10 +232,6 @@ def read_trigger_config(filename):
                 add_line = line
             else:
                 lines.append(line)
-
-    # TODO: Problem 11
-    # line is the list of lines that you need to parse and for which you need
-    # to build triggers
     
     triggers = {}
     
@@ -305,8 +252,6 @@ def read_trigger_config(filename):
 SLEEPTIME = 120 #seconds -- how often we poll
 
 def main_thread(master):
-    # A sample trigger list - you might need to change the phrases to correspond
-    # to what is currently in the news
     try:
         t1 = TitleTrigger("election")
         t2 = DescriptionTrigger("Trump")
@@ -314,9 +259,7 @@ def main_thread(master):
         t4 = AndTrigger(t2, t3)
         triggerlist = [t1, t4]
 
-        # Problem 11
-        # TODO: After implementing read_trigger_config, uncomment this line 
-        # triggerlist = read_trigger_config('triggers.txt')
+        triggerlist = read_trigger_config('triggers.txt')
         
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
@@ -337,6 +280,7 @@ def main_thread(master):
         button = Button(frame, text="Exit", command=root.destroy)
         button.pack(side=BOTTOM)
         guidShown = []
+        
         def get_cont(newstory):
             if newstory.get_guid() not in guidShown:
                 cont.insert(END, newstory.get_title()+"\n", "title")
@@ -367,10 +311,10 @@ def main_thread(master):
         print(e)
 
 
-#if __name__ == '__main__':
-#    root = Tk()
-#    root.title("Some RSS parser")
-#    t = threading.Thread(target=main_thread, args=(root,))
-#    t.start()
-#    root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    root.title("Some RSS parser")
+    t = threading.Thread(target=main_thread, args=(root,))
+    t.start()
+    root.mainloop()
 
