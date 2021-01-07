@@ -129,8 +129,7 @@ class PlaintextMessage(Message):
         shift (integer): the shift associated with this message
 
         '''
-        self.message_text = text
-        self.valid_words = load_words(WORDLIST_FILENAME)
+        Message.__init__(self, text)
         self.shift = shift
         self.encryption_dict = self.build_shift_dict(shift)
         self.message_text_encrypted = self.apply_shift(shift)
@@ -172,8 +171,7 @@ class CiphertextMessage(Message):
         Initializes a CiphertextMessage object
         text (string): the message's text
         '''
-        self.message_text = text
-        self.valid_words = load_words(WORDLIST_FILENAME)
+        Message.__init__(self, text)
 
     def decrypt_message(self):
         '''

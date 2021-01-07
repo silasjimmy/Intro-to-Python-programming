@@ -98,8 +98,7 @@ class EncryptedSubMessage(SubMessage):
         Initializes an EncryptedSubMessage object
         text (string): the encrypted message text
         '''
-        self.message_text = text
-        self.valid_words = load_words(WORDLIST_FILENAME)
+        SubMessage.__init__(self, text)
 
     def decrypt_message(self):
         '''
