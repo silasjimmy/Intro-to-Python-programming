@@ -225,13 +225,16 @@ class OrTrigger(Trigger):
 def filter_stories(stories, triggerlist):
     """
     Takes in a list of NewsStory instances.
-
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-    return stories
+    filtered_stories = []
+    
+    for trigger in triggerlist:
+        for story in stories:
+            if trigger.evaluate(story):
+                filtered_stories.append(story)
+        
+    return filtered_stories
 
 
 
@@ -330,10 +333,10 @@ def main_thread(master):
         print(e)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    root.title("Some RSS parser")
-    t = threading.Thread(target=main_thread, args=(root,))
-    t.start()
-    root.mainloop()
+#if __name__ == '__main__':
+#    root = Tk()
+#    root.title("Some RSS parser")
+#    t = threading.Thread(target=main_thread, args=(root,))
+#    t.start()
+#    root.mainloop()
 
